@@ -35,7 +35,6 @@ angular.module('ngCordova.plugins.nativeAudio', [])
         }, function (err) {
           q.reject(err);
         }, completeCallback);
-
         return q.promise;
       },
 

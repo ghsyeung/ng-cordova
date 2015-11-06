@@ -1,59 +1,74 @@
-// install   :      cordova plugin add org.apache.cordova.statusbar
-// link      :      https://github.com/apache/cordova-plugin-statusbar/blob/master/doc/index.md
+// install   :      cordova plugin add cordova-plugin-statusbar
+// link      :      https://github.com/apache/cordova-plugin-statusbar
 
+/* globals StatusBar: true */
 angular.module('ngCordova.plugins.statusbar', [])
 
-  .factory('$cordovaStatusbar', [function () {
+.factory('$cordovaStatusbar', [function () {
 
-    return {
-      overlaysWebView: function (bool) {
-        return StatusBar.overlaysWebView(!!bool);
-      },
+  return {
 
-      style: function (style) {
-        switch (style) {
-          // Default
-          case 0:
-            return StatusBar.styleDefault();
+    /**
+      * @param {boolean} bool
+      */
+    overlaysWebView: function (bool) {
+      return StatusBar.overlaysWebView(!!bool);
+    },
 
-          // LightContent
-          case 1:
-            return StatusBar.styleLightContent();
+    STYLES: {
+      DEFAULT: 0,
+      LIGHT_CONTENT: 1,
+      BLACK_TRANSLUCENT: 2,
+      BLACK_OPAQUE: 3
+    },
 
-          // BlackTranslucent
-          case 2:
-            return StatusBar.styleBlackTranslucent();
+    /**
+      * @param {number} style
+      */
+    style: function (style) {
+      switch (style) {
+        // Default
+        case 0:
+        return StatusBar.styleDefault();
 
-          // BlackOpaque
-          case 3:
-            return StatusBar.styleBlackOpaque();
+        // LightContent
+        case 1:
+        return StatusBar.styleLightContent();
 
-          default:
-            return StatusBar.styleDefault();
-        }
-      },
+        // BlackTranslucent
+        case 2:
+        return StatusBar.styleBlackTranslucent();
 
-      // supported names:
-      // black, darkGray, lightGray, white, gray, red, green,
-      // blue, cyan, yellow, magenta, orange, purple, brown
-      styleColor: function (color) {
-        return StatusBar.backgroundColorByName(color);
-      },
+        // BlackOpaque
+        case 3:
+        return StatusBar.styleBlackOpaque();
 
-      styleHex: function (colorHex) {
-        return StatusBar.backgroundColorByHexString(colorHex);
-      },
-
-      hide: function () {
-        return StatusBar.hide();
-      },
-
-      show: function () {
-        return StatusBar.show();
-      },
-
-      isVisible: function () {
-        return StatusBar.isVisible;
+        default:
+        return StatusBar.styleDefault();
       }
-    };
-  }]);
+    },
+
+    // supported names:
+    // black, darkGray, lightGray, white, gray, red, green,
+    // blue, cyan, yellow, magenta, orange, purple, brown
+    styleColor: function (color) {
+      return StatusBar.backgroundColorByName(color);
+    },
+
+    styleHex: function (colorHex) {
+      return StatusBar.backgroundColorByHexString(colorHex);
+    },
+
+    hide: function () {
+      return StatusBar.hide();
+    },
+
+    show: function () {
+      return StatusBar.show();
+    },
+
+    isVisible: function () {
+      return StatusBar.isVisible;
+    }
+  };
+}]);

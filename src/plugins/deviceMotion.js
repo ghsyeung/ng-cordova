@@ -1,5 +1,5 @@
-// install   :     cordova plugin add org.apache.cordova.device-motion
-// link      :     https://github.com/apache/cordova-plugin-device-motion/blob/master/doc/index.md
+// install   :     cordova plugin add cordova-plugin-device-motion
+// link      :     https://github.com/apache/cordova-plugin-device-motion
 
 angular.module('ngCordova.plugins.deviceMotion', [])
 
@@ -8,6 +8,11 @@ angular.module('ngCordova.plugins.deviceMotion', [])
     return {
       getCurrentAcceleration: function () {
         var q = $q.defer();
+
+        if (angular.isUndefined(navigator.accelerometer) ||
+        !angular.isFunction(navigator.accelerometer.getCurrentAcceleration)) {
+          q.reject('Device do not support watchAcceleration');
+        }
 
         navigator.accelerometer.getCurrentAcceleration(function (result) {
           q.resolve(result);
@@ -20,6 +25,11 @@ angular.module('ngCordova.plugins.deviceMotion', [])
 
       watchAcceleration: function (options) {
         var q = $q.defer();
+
+        if (angular.isUndefined(navigator.accelerometer) ||
+        !angular.isFunction(navigator.accelerometer.watchAcceleration)) {
+          q.reject('Device do not support watchAcceleration');
+        }
 
         var watchID = navigator.accelerometer.watchAcceleration(function (result) {
           q.notify(result);

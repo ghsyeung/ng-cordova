@@ -4,6 +4,7 @@
 angular.module('ngCordova.plugins.push', [])
 
   .factory('$cordovaPush', ['$q', '$window', '$rootScope', '$timeout', function ($q, $window, $rootScope, $timeout) {
+
     return {
       onNotification: function (notification) {
         $timeout(function () {
@@ -15,13 +16,13 @@ angular.module('ngCordova.plugins.push', [])
         var q = $q.defer();
         var injector;
         if (config !== undefined && config.ecb === undefined) {
-          if (document.querySelector('[ng-app]') == null) {
-            injector = "document.body";
+          if (document.querySelector('[ng-app]') === null) {
+            injector = 'document.body';
           }
           else {
-            injector = "document.querySelector('[ng-app]')";
+            injector = 'document.querySelector(\'[ng-app]\')';
           }
-          config.ecb = "angular.element(" + injector + ").injector().get('$cordovaPush').onNotification";
+          config.ecb = 'angular.element(' + injector + ').injector().get(\'$cordovaPush\').onNotification';
         }
 
         $window.plugins.pushNotification.register(function (token) {

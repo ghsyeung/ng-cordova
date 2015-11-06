@@ -13,11 +13,19 @@ var gulp = require('gulp'),
   prettify = require('gulp-prettify'),
   changelog = require('conventional-changelog'),
   q = require('q'),
-  fs = require('fs');
+  fs = require('fs'),
+  jscs = require('gulp-jscs'),
+  git = require('gulp-git');
 
-gulp.task('default', ['build']);
+gulp.task('default', ['git', 'build']);
 
-gulp.task('build', function () {
+gulp.task('lint', ['jshint', 'jscs']);
+
+gulp.task('git', function(cb) {
+    git.updateSubmodule({ args: '--init --remote' }, cb);
+});
+
+gulp.task('build', ['git'], function () {
   gulp.src(buildConfig.mockFiles)
     .pipe(concat('ng-cordova-mocks.js'))
     .pipe(header(buildConfig.closureStart))
@@ -74,10 +82,28 @@ gulp.task('karma', function (done) {
   karma.start(karmaConf, done);
 });
 
-gulp.task('lint', function () {
+gulp.task('jshint', function () {
   return gulp.src('./src/plugins/*.js')
     .pipe(jshint())
-    .pipe(jshint.reporter('jshint-stylish'));
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('fail'));
+});
+
+gulp.task('jscs', function () {
+  gulp.src('src/plugins/*.js')
+    .pipe(jscs({
+      fix: true,
+      "requireSpaceAfterKeywords": ['function']
+    }))
+    .pipe(gulp.dest('src/plugins/'));
+
+
+  gulp.src('./src/mocks/*.js')
+    .pipe(jscs({
+      fix: true,
+      "requireSpaceAfterKeywords": ['function']
+    }))
+    .pipe(gulp.dest('src/mocks/'));
 });
 
 gulp.task('karma-watch', function (done) {
