@@ -1,5 +1,5 @@
-// install   :     cordova plugin add org.apache.cordova.contacts
-// link      :     https://github.com/apache/cordova-plugin-contacts/blob/master/doc/index.md
+// install   :     cordova plugin add cordova-plugin-contacts
+// link      :     https://github.com/apache/cordova-plugin-contacts
 
 angular.module('ngCordova.plugins.contacts', [])
 
@@ -39,13 +39,20 @@ angular.module('ngCordova.plugins.contacts', [])
         var q = $q.defer();
         var fields = options.fields || ['id', 'displayName'];
         delete options.fields;
-
-        navigator.contacts.find(fields, function (results) {
-          q.resolve(results);
-        }, function (err) {
-          q.reject(err);
-        }, options);
-
+        if (Object.keys(options).length === 0) {
+          navigator.contacts.find(fields, function (results) {
+            q.resolve(results);
+          },function (err) {
+            q.reject(err);
+          });
+        }
+        else {
+          navigator.contacts.find(fields, function (results) {
+            q.resolve(results);
+          }, function (err) {
+            q.reject(err);
+          }, options);
+        }
         return q.promise;
       },
 
